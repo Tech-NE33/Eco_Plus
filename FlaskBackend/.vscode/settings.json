@@ -1,3 +1,17 @@
 {
     "python.pythonPath": ".env"
+    "git.ignoreLimitWarning": true,
+    "files.watcherExclude": {
+        "**/.nenv/**": true,
+        "**/node_modules/*/**": true,
+        "**/.git/**":true,
+        "**/.git/subtree-cache/**":true,
+        "**/.git/objects/**":true,
+        "**/.cache/**":true,
+        "**/public/**":true,
+        "/home/pi/EcoPlus/Eco_Plus/client/node_modules/*/**":true,
+        "/home/pi/EcoPlus/Eco_Plus/FlaskBackend/nenv/**":true
+
+    },
 }
+
