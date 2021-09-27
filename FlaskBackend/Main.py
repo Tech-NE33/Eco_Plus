@@ -198,15 +198,17 @@ def get_SDP6_Data():  #Get sensor data and update UI
         global duty_cycle #Duty cycle for test monitoring (to remove)
         global fname #Current logfile name
         print(fname)
-        sdpr = round(SensorsRead.read_SDP(),1) 
-        calcEncProg= round( (sdpr/24)*100,1)
-        hv120r= round(SensorsRead.read_NPU(),1)
-        Hepa_Block= round(hv120r/10,1)
-        calcHEPA_Block= round(hv120r/10,1) 
-        calcAirflow=round((-0.0161*hv120r**2+29.634*hv120r+97.052),1) 
-        airflow= round( calcAirflow/1000,1) 
+        sdpr = round(SensorsRead.read_SDP(),1) if SensorsRead.read_SDP() > 0 else 0 #Legend Enclosure Sensor
+        calcEncProg= round( (100/24)*sdpr,1)    #Progress Enclosure Sensor
+        hv120r= round(SensorsRead.read_NPU(),1) if SensorsRead.read_NPU() > 0 else 0 #Legend Hepa Blockage
+        Hepa_Block= round(hv120r/10,1)  #Progress Hepa Blockage
+        hv110r= round(SensorsRead.read_Airflow(),1) if SensorsRead.read_Airflow() > 0 else 0 #Legend Airflow
+        airflow=  round( (100/1100)*hv110r,1)#Progress Airflow
+        # calcHEPA_Block= round(hv120r/10,1) #??
+        calcAirflow=round((-0.0161*hv120r**2+29.634*hv120r+97.052),1) #airflow based internal pressure
+        airflow_p= round( calcAirflow/1000,1) 
         runString= "Manual" if run_mode==1 else "Auto"
-        msgt=json.dumps({ "airflow_prog": airflow, "airflow_disp":airflow, "enclosure_prog":calcEncProg, "enclosure_disp":sdpr if sdpr>=0 else 0 , "block_prog":calcHEPA_Block, "block_disp":Hepa_Block }) #UI Data : Display values and progress bar value could be computed in js.
+        msgt=json.dumps({ "airflow_prog":airflow_p , "airflow_disp": calcAirflow, "enclosure_prog":sdpr, "enclosure_disp":calcEncProg, "block_prog":hv110r, "block_disp":airflow_p }) #UI Data : Display values and progress bar value could be computed in js.
         client.publish(TOPIC,msgt) #publish data to UI
         writetolog(file_path,fname,calcEncProg,Hepa_Block,runString) #Log record
 
