@@ -210,7 +210,7 @@ def get_SDP6_Data():  #Get sensor data and update UI
         runString= "Manual" if run_mode==1 else "Auto"
         msgt=json.dumps({ "airflow_prog":airflow_p , "airflow_disp": calcAirflow, "enclosure_prog":sdpr, "enclosure_disp":calcEncProg, "block_prog":hv110r, "block_disp":airflow_p }) #UI Data : Display values and progress bar value could be computed in js.
         client.publish(TOPIC,msgt) #publish data to UI
-        writetolog(file_path,fname,calcEncProg,Hepa_Block,runString) #Log record
+        writetolog(file_path,fname,calcAirflow,duty_cycle,hv110r) #Log record
 
 def on_message_run_mode(mosq, obj, msg): #Update run_mode upon change page in UI
     global run_mode
