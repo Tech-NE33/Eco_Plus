@@ -189,7 +189,7 @@ def copylogs(filelist,wpath): #Wrapper copying files from source to target
         print("Unexpected error:", sys.exc_info())
 
 def runshutdown(): #Not yet implemented : Trigger soft shutdown when power off is detected.
-    print("starting shutdown now")
+    os.system("sudo shutdown -h now")
 
 def get_SDP6_Data():  #Get sensor data and update UI
         global sdpr #SDP reading
@@ -197,12 +197,11 @@ def get_SDP6_Data():  #Get sensor data and update UI
         global run_mode #Run Mode for data logging
         global duty_cycle #Duty cycle for test monitoring (to remove)
         global fname #Current logfile name
-        print(fname)
         sdpr = round(SensorsRead.read_SDP(),1) if SensorsRead.read_SDP() > 0 else 0 #Legend Enclosure Sensor
         calcEncProg= round( (100/24)*sdpr,1)    #Progress Enclosure Sensor
         hv120r= round(SensorsRead.read_NPU(),1) if SensorsRead.read_NPU() > 0 else 0 #Legend Hepa Blockage
         Hepa_Block= round(hv120r/10,1)  #Progress Hepa Blockage
-        hv110r= round(SensorsRead.read_Airflow(),1) if SensorsRead.read_Airflow() > 0 else 0 #Legend Airflow
+        hv110r= round(SensorsRead.read_Airflow(),1) if SensorsRead.read_Airflow() < 0 else 0 #Legend Airflow
         airflow=  round( (100/1100)*hv110r,1)#Progress Airflow
         # calcHEPA_Block= round(hv120r/10,1) #??
         calcAirflow=round((-0.0161*hv120r**2+29.634*hv120r+97.052),1) #airflow based internal pressure
@@ -210,6 +209,7 @@ def get_SDP6_Data():  #Get sensor data and update UI
         runString= "Manual" if run_mode==1 else "Auto"
         msgt=json.dumps({ "airflow_prog":airflow_p , "airflow_disp": calcAirflow, "enclosure_prog":sdpr, "enclosure_disp":calcEncProg, "block_prog":hv110r, "block_disp":airflow_p }) #UI Data : Display values and progress bar value could be computed in js.
         client.publish(TOPIC,msgt) #publish data to UI
+        print("AIrflow sensor Val is :",hv110r)
         writetolog(file_path,fname,calcAirflow,duty_cycle,hv110r) #Log record
 
 def on_message_run_mode(mosq, obj, msg): #Update run_mode upon change page in UI
@@ -237,6 +237,7 @@ def main():
         print("error loading logs record")
     
     while True:
+        time.sleep(0.5)
         if is_powered()<=-0.3: 
             runshutdown()
         if status==0: #Unit is off, check if gauges have been reset or else pause and check if status has changed
