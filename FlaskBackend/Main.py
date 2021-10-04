@@ -198,12 +198,14 @@ def get_SDP6_Data():  #Get sensor data and update UI
         global duty_cycle #Duty cycle for test monitoring (to remove)
         global fname #Current logfile name
         sdpr = round(SensorsRead.read_SDP(),1) if SensorsRead.read_SDP() > 0 else 0 #Legend Enclosure Sensor
-        enclosureProgress= round( (100/24)*sdpr,1)    #Progress Enclosure Sensor
-        hv120r= round(SensorsRead.read_NPU(),1) if SensorsRead.read_NPU() > 0 else 0 #Legend Hepa Blockage
+        enclosureProgress= round( (100/24)*sdpr*-1,1)    #Progress Enclosure Sensor
+        hv120r= round(SensorsRead.read_NPU(),1) if SensorsRead.read_NPU() < 0 else 0 #Legend Hepa Blockage
         blockageProgress= round(hv120r/10,1)  #Progress Hepa Blockage
-        hv110r= round(SensorsRead.read_Airflow(),1) if SensorsRead.read_Airflow() < 0 else 0 #Legend Airflow
-        airflowProgress=  round( (100/11000)*hv110r,1)#Progress Airflow
-        airflowLegend= round( hv110r/1000,1) 
+        hv110r= round(SensorsRead.read_Airflow()*-1,1) 
+        airflowCalculation= -0.0115*hv110r**2+20.102*hv110r+1703.9 
+        airflowLegendCalc= airflowCalculation     
+        airflowLegend= round( airflowLegendCalc,1) if airflowLegendCalc > 0 else 0 #Legend Airflow
+        airflowProgress=  round( (100/11000)*airflowLegend,1)#Progress Airflow
         runString= "Manual" if run_mode==1 else "Auto"
         msgt=json.dumps({ "airflow_progress":airflowProgress , "airflow_legend": airflowLegend, 
         "enclosure_progress":enclosureProgress, "enclosure_legend":sdpr, "blockage_progress":blockageProgress, "blockage_legend":hv120r }) #UI Data : Display values and progress bar value could be computed in js.

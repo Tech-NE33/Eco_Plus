@@ -30,7 +30,7 @@ def HV120_Set():
 	pi.i2c_close(handle) # close i2c bus
 	# print("Sensor Config Sent")
 	time.sleep(0.2) # reset takes 15ms so let's give it some time
-	pi.stop()
+	# pi.stop()
 
 def HV110_Set(): 
 	handle = pi.i2c_open(bus, HV110_addr) # open i2c bus
@@ -38,7 +38,7 @@ def HV110_Set():
 	pi.i2c_close(handle) # close i2c bus
 	# print("Sensor Config Sent")
 	time.sleep(0.2) # reset takes 15ms so let's give it some time
-	pi.stop()
+	# pi.stop()
 
 def read_SDP():
 	handle = pi.i2c_open(bus, SDP_addr) # open i2c bus
@@ -49,7 +49,7 @@ def read_SDP():
 	t2 = byteArray[1] # least significant byte lsb
 	SDP_reading = int.from_bytes(byteArray, byteorder='big', signed=True) # combine both bytes 
 	SDP_Pressure = ((SDP_reading / 240)) # formula from datasheet
-	pi.stop()
+	# pi.stop()
 	return SDP_Pressure
 
 def read_Airflow():
@@ -59,8 +59,8 @@ def read_Airflow():
 	h1 = byteArray[0] # most significant byte msb
 	h2 = byteArray[1] # least significant byte lsb
 	HV110_reading= int.from_bytes(byteArray, byteorder='big', signed=True)
-	HV110_Pressure = HV110_reading*HV_convert*HV110_range
-	pi.stop()
+	HV110_Pressure = HV110_reading*HV_convert*HV110_range -1.7
+	# pi.stop()
 	return HV110_Pressure
 
 def read_NPU():
@@ -72,7 +72,7 @@ def read_NPU():
 	HV120_reading= int.from_bytes(byteArray, byteorder='big', signed=True)
 	# HV120_reading=3647
 	HV120_Pressure = HV120_reading*HV_convert*HV120_range
-	pi.stop()
+	# pi.stop()
 	return HV120_Pressure
 # HV110_Set()
 # HV120_Set()

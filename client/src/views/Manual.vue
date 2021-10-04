@@ -22,9 +22,9 @@
               :size="240"
               lineMode="out -4"
               emptyColor="#B0BEC5"
-              v-bind:legend-value="sensordata.airflow_legend"
+              v-bind:legend-value="sensordata.airflow_legend "
             >
-              <span slot="legend-value" class="v-label headline">/{{ gauges[0].rangeHigh }}</span>
+              <span slot="legend-value" class="v-label headline">{{ gauges[0].rangeHigh }}M<sup>3</sup>/Hr</span>
               <p slot="legend-caption" class="title mt-2 ma-0">{{ gauges[0].name }}</p>
               <span
                 slot="legend-caption"
@@ -40,7 +40,7 @@
           <v-layout justify-center mt-4>
             <vue-ellipse-progress
               class="v-label headline"
-              v-bind:progress="sensordata.enclosure_progress"
+              v-bind:progress="sensordata.enclosure_progress* -1"
               :thickness="16"
               :color="encColored"
               :angle="0"
@@ -67,7 +67,7 @@
           <v-layout justify-center mt-4>
             <vue-ellipse-progress
               class="v-label headline"
-              :progress="sensordata.blockage_progress"
+              :progress="sensordata.blockage_progress * -1"
               :thickness="16"
               :color="presColored"
               :angle="0"
@@ -76,9 +76,9 @@
               :size="240"
               lineMode="out -4"
               emptyColor="#B0BEC5"
-              v-bind:legend-value="sensordata.blockage_legend"
+              v-bind:legend-value="sensordata.blockage_legend *-1"
             >
-              <span slot="legend-value" class="v-label headline">/{{ gauges[2].rangeHigh }}</span>
+              <span slot="legend-value" class="v-label headline">{{ gauges[2].rangeHigh }} Pa</span>
               <p slot="legend-caption" class="title mt-2 ma-0">{{ gauges[2].name }}</p>
               <span
                 slot="legend-caption"
@@ -187,9 +187,9 @@ export default {
         name: "Airflow",
         progress: 0,
         show: 2.6,
-        unit: "(000's M<sup>3</sup>/Hr)",
+        unit: "",
         color: "green",
-        rangeHigh: 10
+        rangeHigh: ""
       },
       {
         name: "Enclosure Pressure",
@@ -203,9 +203,9 @@ export default {
         name: "HEPA Blockage",
         progress: 80,
         show: 80,
-        unit: "(Percent)",
+        unit: "",
         color: "red",
-        rangeHigh: 100
+        rangeHigh: ""
       }
     ]
   }),
