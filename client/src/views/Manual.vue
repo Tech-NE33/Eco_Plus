@@ -13,7 +13,7 @@
           <v-layout justify-center mt-4>
             <vue-ellipse-progress
               class="v-label headline"
-              v-bind:progress="sensordata.airflow_disp"
+              v-bind:progress="sensordata.airflow_progress"
               :thickness="16"
               :color="airColored"
               :angle="0"
@@ -22,21 +22,16 @@
               :size="240"
               lineMode="out -4"
               emptyColor="#B0BEC5"
-              v-bind:legend-value="sensordata.airflow_prog"
+              v-bind:legend-value="sensordata.airflow_legend"
             >
-              <span slot="legend-value" class="v-label headline"
-                >/{{ gauges[0].rangeHigh }}</span
-              >
-              <p slot="legend-caption" class="title mt-2 ma-0">
-                {{ gauges[0].name }}
-              </p>
+              <span slot="legend-value" class="v-label headline">/{{ gauges[0].rangeHigh }}</span>
+              <p slot="legend-caption" class="title mt-2 ma-0">{{ gauges[0].name }}</p>
               <span
                 slot="legend-caption"
                 style="font-size:13pt"
                 class="mt-0 pa-0 theme--light"
                 v-html="gauges[0].unit"
-                >{{ gauges[0].unit }}</span
-              >
+              >{{ gauges[0].unit }}</span>
             </vue-ellipse-progress>
           </v-layout>
         </v-flex>
@@ -45,7 +40,7 @@
           <v-layout justify-center mt-4>
             <vue-ellipse-progress
               class="v-label headline"
-              v-bind:progress="sensordata.enclosure_disp"
+              v-bind:progress="sensordata.enclosure_progress"
               :thickness="16"
               :color="encColored"
               :angle="0"
@@ -54,21 +49,16 @@
               :size="240"
               lineMode="out -4"
               emptyColor="#B0BEC5"
-              v-bind:legend-value="sensordata.enclosure_prog"
+              v-bind:legend-value="sensordata.enclosure_legend"
             >
-              <span slot="legend-value" class="v-label headline"
-                >/{{ gauges[1].rangeHigh }}</span
-              >
-              <p slot="legend-caption" class="title mt-2 ma-0">
-                {{ gauges[1].name }}
-              </p>
+              <span slot="legend-value" class="v-label headline">/{{ gauges[1].rangeHigh }}</span>
+              <p slot="legend-caption" class="title mt-2 ma-0">{{ gauges[1].name }}</p>
               <span
                 slot="legend-caption"
                 style="font-size:13pt"
                 class="mt-0 pa-0 theme--light"
                 v-html="gauges[1].unit"
-                >{{ gauges[1].unit }}</span
-              >
+              >{{ gauges[1].unit }}</span>
             </vue-ellipse-progress>
           </v-layout>
         </v-flex>
@@ -77,7 +67,7 @@
           <v-layout justify-center mt-4>
             <vue-ellipse-progress
               class="v-label headline"
-              :progress="sensordata.block_disp"
+              :progress="sensordata.blockage_progress"
               :thickness="16"
               :color="presColored"
               :angle="0"
@@ -86,21 +76,16 @@
               :size="240"
               lineMode="out -4"
               emptyColor="#B0BEC5"
-              v-bind:legend-value="sensordata.block_prog"
+              v-bind:legend-value="sensordata.blockage_legend"
             >
-              <span slot="legend-value" class="v-label headline"
-                >/{{ gauges[2].rangeHigh }}</span
-              >
-              <p slot="legend-caption" class="title mt-2 ma-0">
-                {{ gauges[2].name }}
-              </p>
+              <span slot="legend-value" class="v-label headline">/{{ gauges[2].rangeHigh }}</span>
+              <p slot="legend-caption" class="title mt-2 ma-0">{{ gauges[2].name }}</p>
               <span
                 slot="legend-caption"
                 style="font-size:13pt"
                 class="mt-0 pa-0 theme--light"
                 v-html="gauges[2].unit"
-                >{{ gauges[2].unit }}</span
-              >
+              >{{ gauges[2].unit }}</span>
             </vue-ellipse-progress>
           </v-layout>
         </v-flex>
@@ -129,9 +114,7 @@
           </v-flex>
           <v-flex md1 mt-1 pa-0 fill-height>
             <v-card white flat>
-              <v-icon v-if="switch1 === true" color="red" class="pt-2" large
-                >lock</v-icon
-              >
+              <v-icon v-if="switch1 === true" color="red" class="pt-2" large>lock</v-icon>
               <v-icon v-else color="gray" class="pt-2" large>lock_open</v-icon>
               <v-switch color="red" class="pt-0" v-model="switch1"></v-switch>
             </v-card>
@@ -156,43 +139,43 @@ export default {
       reconnectPeriod: 4000,
       clientId: "Manuage",
       username: "",
-      password: "",
+      password: ""
     },
     subscription: {
       topic: "esensor",
-      qos: 0,
+      qos: 0
     },
     publish_run: {
       topic: "run_mode",
       qos: 1,
-      payload: "0",
+      payload: "0"
     },
     publish_status: {
       topic: "is_on",
       qos: 1,
-      payload: '{ "msg": 0 }',
+      payload: '{ "msg": 0 }'
     },
     publish_DC: {
       topic: "duty_cycle",
       qos: 1,
-      payload: "25",
+      payload: "25"
     },
     sensordata: {
-      airflow_prog: 0,
-      airflow_disp: 0,
-      enclosure_prog: 0,
-      enclosure_disp: 0,
-      block_prog: 0,
-      block_disp: 0,
+      airflow_progress: 0,
+      airflow_legend: 0,
+      enclosure_progress: 0,
+      enclosure_legend: 0,
+      blockage_progress: 0,
+      blockage_legend: 0
     },
 
     qosList: [
       { label: 0, value: 0 },
       { label: 1, value: 1 },
-      { label: 2, value: 2 },
+      { label: 2, value: 2 }
     ],
     client: {
-      connected: false,
+      connected: false
     },
     subscribeSuccess: false,
     switch1: true,
@@ -206,7 +189,7 @@ export default {
         show: 2.6,
         unit: "(000's M<sup>3</sup>/Hr)",
         color: "green",
-        rangeHigh: 10,
+        rangeHigh: 10
       },
       {
         name: "Enclosure Pressure",
@@ -214,7 +197,7 @@ export default {
         show: 8.9,
         unit: "(Pa)",
         color: "orange",
-        rangeHigh: 24,
+        rangeHigh: 24
       },
       {
         name: "HEPA Blockage",
@@ -222,34 +205,34 @@ export default {
         show: 80,
         unit: "(Percent)",
         color: "red",
-        rangeHigh: 100,
-      },
-    ],
+        rangeHigh: 100
+      }
+    ]
   }),
 
   computed: {
     presColored() {
-      if (this.sensordata.block_disp > 70) return "red"; //1000Pa max
-      if (this.sensordata.block_disp > 60) return "#e06c00";
-      if (this.sensordata.block_disp < 60) return "green";
+      if (this.sensordata.blockage_legend > 70) return "red"; //1000Pa max
+      if (this.sensordata.blockage_legend > 60) return "#e06c00";
+      if (this.sensordata.blockage_legend < 60) return "green";
       return "red";
     },
     encColored() {
-      if (this.sensordata.enclosure_disp > 25) return "red"; //1000Pa max
-      if (this.sensordata.enclosure_disp > 20) return "#e06c00";
-      if (this.sensordata.enclosure_disp < 20) return "green";
+      if (this.sensordata.enclosure_legend > 25) return "red"; //1000Pa max
+      if (this.sensordata.enclosure_legend > 20) return "#e06c00";
+      if (this.sensordata.enclosure_legend < 20) return "green";
       return "red";
     },
     airColored() {
-      if (this.sensordata.airflow_disp > 95) return "red"; //1000Pa max
-      if (this.sensordata.airflow_disp > 90) return "#e06c00";
-      if (this.sensordata.airflow_disp < 90) return "green";
+      if (this.sensordata.airflow_legend > 95) return "red"; //1000Pa max
+      if (this.sensordata.airflow_legend > 90) return "#e06c00";
+      if (this.sensordata.airflow_legend < 90) return "green";
       return "red";
     },
 
     animationDuration() {
       return `${this.duty_cycle}s`;
-    },
+    }
   },
   created: function() {
     this.createConnection();
@@ -290,7 +273,7 @@ export default {
         // eslint-disable-next-line
         console.log("Connection succeeded!");
       });
-      this.client.on("error", (error) => {
+      this.client.on("error", error => {
         // eslint-disable-next-line
         console.log("Connection failed", error);
       });
@@ -317,7 +300,7 @@ export default {
 
     doUnSubscribe() {
       const { topic } = this.subscription;
-      this.client.unsubscribe(topic, (error) => {
+      this.client.unsubscribe(topic, error => {
         // eslint-disable-next-line
         console.log("Unsubscribed");
         if (error) {
@@ -329,7 +312,7 @@ export default {
 
     doPublish() {
       const { topic, qos, payload } = this.publish_run;
-      this.client.publish(topic, payload, qos, (error) => {
+      this.client.publish(topic, payload, qos, error => {
         // eslint-disable-next-line
         console.log("Publishing something in manual");
         if (error) {
@@ -340,7 +323,7 @@ export default {
     },
     doPageAck() {
       const { topic, qos, payload } = this.publish;
-      this.client.publish(topic, payload, qos, (error) => {
+      this.client.publish(topic, payload, qos, error => {
         if (error) {
           // eslint-disable-next-line
           console.log("Publish error", error);
@@ -349,7 +332,7 @@ export default {
     },
     doPublishDC() {
       const { topic, qos, payload } = this.publish_DC;
-      this.client.publish(topic, payload, qos, (error) => {
+      this.client.publish(topic, payload, qos, error => {
         // eslint-disable-next-line
         console.log("Duty Cycle updated"), payload;
         if (error) {
@@ -364,7 +347,7 @@ export default {
         try {
           this.client.end();
           this.client = {
-            connected: false,
+            connected: false
           };
           // eslint-disable-next-line
           console.log("Successfully disconnected!");
@@ -380,7 +363,7 @@ export default {
     },
     increment() {
       this.duty_cycle++;
-    },
-  },
+    }
+  }
 };
 </script>

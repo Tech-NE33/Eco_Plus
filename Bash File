@@ -1,0 +1,8 @@
+#!/bin/bash
+#Startup Script
+#chmod +x /home/pi/example.sh To make executable
+sudo pigpiod #start daemon for the pi
+sudo python3 path to script.py & #Start script (in venv)
+serve -s PATH/client/dist #Start npm serve
+chromium-browser --start-fullscreen --kiosk localhost:5000
+

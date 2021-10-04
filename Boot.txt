@@ -1,0 +1,22 @@
+
+#! /usr/bin/env python (add to beginning of main python file)
+
+
+sudo crontab -e
+edit with nano
+
+@reboot 
+@reboot python3 path to script.py
+
+
+=> npm install -g serve
+
+run with serve -s dist
+
+sudo nano /etc/xdg/autostart/display.desktop
+[Desktop Entry]
+Encoding=UTF-8
+Name=Run App
+Exec= file to script
+Terminal=true
+Type=Application
